@@ -45,7 +45,7 @@
             q.pop();
 
             for (int neighbor = 0; neighbor < n; ++neighbor) {
-                if (g.get_adjMatrix()[node][neighbor] == 1 && !visited[neighbor]) {
+                if (g.get_adjMatrix()[node][neighbor] != 0 && !visited[neighbor]) { // Check for non-zero value
                     visited[neighbor] = true;
                     q.push(neighbor);
                     ++visitedCount;

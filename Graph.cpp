@@ -144,12 +144,11 @@ namespace ariel {
         return result;
     }
     Graph& Graph::operator+=(const Graph& other) {
-    // Ensure that both graphs have the same number of vertices
-    if (this->numOfVertices != other.numOfVertices) {
-        throw std::invalid_argument("Graphs must be of the same order of magnitude");
-    }
+    if (this->get_adjMatrix().size() != other.get_adjMatrix().size() || this->get_adjMatrix()[0].size() != other.get_adjMatrix()[0].size()) {
+            throw std::invalid_argument("Graphs must be of the same order of magnitude");
+        }
 
-    // Perform element-wise addition of adjacency matrices
+   
     for (int i = 0; i < numOfVertices; ++i) {
         for (int j = 0; j < numOfVertices; ++j) {
             this->adjMatrix[i][j] += other.adjMatrix[i][j];
