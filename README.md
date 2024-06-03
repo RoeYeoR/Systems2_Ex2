@@ -1,4 +1,7 @@
+# Systems Programming B - C++ Programming: Graph Project
 
+This repository contains the project assignment for the Systems Programming B course at Ariel University. 
+The project focuses on implementing operators related to graphs in C++.
 
 ## Class: Graph
 
