@@ -1,23 +1,66 @@
-# מטלה 2 - גרפים והעמסת אופרטורים
-
-במטלה הקודמת מימשתם את המחלקה `Graph.cpp` המאפשרת ייצוג של גרפים בעזרת מטריצת שכנויות. במטלה הזאת, אתם תרחיבו את המחלקה ותוסיפו תמיכה באופרטורים חשבוניים על גרפים.
-כאמור, הגרפים מיוצגים בעזרת מטריצת שכנויות, לכן כל האופרטורים צריכים להיות חוקיים עבור מטריצות (כמו שלמדתם בקורס אלגברה לינארית).
-
-אתם תצטרכו להוסיף את האופרטורים הבאים:
-
-- שישה אופרטורים חשבוניים: חיבור (+) הוספה (+=) פלוס אונרי (+), ושלושת האופרטורים המקבילים לחיסור (-). כאמור, חיבור/חיסור של שתי מטריצות מוגדר רק על מטריצות מאותו סדר גודל nXn. ניסיון לחבר/לחסר שתי מטריצות שלא מקיימות תנאי זה יגרום לזריקת שגיאה.
-- שישה אופרטורי השוואה: גדול, גדול-או-שווה, קטן, קטן-או-שווה, שווה, לא-שווה. לשם מטלה זו כללי השוואת גרפים הם כדלקמן:
-
-  1. גרפים G1 ו-G2 ייקראו שווים אם הם מאותו סדר גודל ומכילים את אותן הצלעות (והמשקלים של הצלעות זהים) או אם G1 לא גדול מ-G2 וגם G2 לא גדול מ-G1.
-  2. גרף G2 גדול מגרף G1 אם הגרף G1 מוכל ממש בגרף G2. אם אף גרף לא מוכל ממש בשני והגרפים לא שווים, אז גרף G2 גדול מגרף G1 אם מספר הצלעות ב-G2 גדול ממספר הצלעות ב-G1. אם בכל זאת מספר הצלעות זהה, אז הגרף G2 גדול מהגרף G1 אם המטריצה המייצגת של G2 בעלת סדר גודל גבוה יותר משל G1.
-
-- הגדלה ב-1 (++) והקטנה ב-1 (--) לפני ואחרי המספר. פעולה זו תגדיל או תקטין ב-1 את כל המשקלים של הצלעות בגרף.
-- הכפלה בסקלר שלם (`int`) - מכפיל את המשקל של כל הצלעות.
-- הכפלת גרפים - אנחנו מגדירים את פעולת הכפל בין גרף G1 לגרף G2 על ידי מכפלה של המטריצות המייצגות של שני הגרפים. התוצאה צריכה להיות מטריצה המייצגת גרף. ניסיון לבצע כפל בין גרפים בגדלים שונים צריך לזרוק שגיאה.
-- אופרטור פלט - הדפסה הגיונית של הגרף (צורת ההפדסה היא לשיקולכם).
 
 
-כמו כן, עליכם לכלול גם את הקובץ `Algorithms.cpp` מהמטלה הקודמת ולראות כיצד הפונקציות שהגדרתם בפעם הקודמת משתנות עכשיו. בנוסף לקבצים של המטלה אתם נדרשים להגיש גם קובץ README המתאר את אופן המימוש ואת החלוקה שביצעתם בקוד (סוג של מדריך משתמש).
-עליכם לכתוב בתחילת כל קובץ את המייל שלכם. אי עמידה בהנחיות תגרור הפחתה בציון.
-בהצלחה!
+## Class: Graph
+
+### Private Members:
+- `bool is_directed`: Indicates whether the graph is directed or undirected.
+- `int numOfVertices`: Number of vertices in the graph.
+- `int numOfEdges`: Number of edges in the graph.
+- `std::vector<std::vector<int>> adjMatrix`: Adjacency matrix representing the graph.
+
+### Public Members:
+- `Graph()`: Default constructor.
+- `Graph(int n)`: Constructor initializing the adjacency matrix with size `n x n`.
+- `bool get_is_directed() const`: Returns whether the graph is directed or not.
+- `std::vector<std::vector<int>> get_adjMatrix() const`: Returns the adjacency matrix of the graph.
+- `int countEdges() const`: Returns the total number of edges in the graph.
+- `bool containsNegativeWeights() const`: Checks if the graph contains negative weights.
+- `bool isDirected(const std::vector<std::vector<int>>& matrix) const`: Checks if the given adjacency matrix represents a directed graph.
+- `Graph getTranspose() const`: Returns the transpose of the graph.
+- `void loadGraph(const std::vector<std::vector<int>>& adj_Mat)`: Loads the graph from a given adjacency matrix.
+- `std::string printGraph() const`: Returns a string representation of the graph.
+- `bool containsGraph(const Graph& other) const`: Checks if the graph contains another graph.
+- `Graph operator+(const Graph& other) const`: Performs addition of two graphs.
+- `Graph& operator+=(const Graph& other)`: Performs in-place addition of two graphs.
+- `Graph operator-(const Graph& other) const`: Performs subtraction of two graphs.
+- `Graph& operator-=(const Graph& other)`: Performs in-place subtraction of two graphs.
+- `Graph operator+() const`: Unary positive operator.
+- `Graph operator-() const`: Unary negative operator.
+- `bool operator>(const Graph& other) const`: Greater than operator.
+- `bool operator>=(const Graph& other) const`: Greater than or equal to operator.
+- `bool operator<(const Graph& other) const`: Less than operator.
+- `bool operator<=(const Graph& other) const`: Less than or equal to operator.
+- `bool operator==(const Graph& other) const`: Equality operator.
+- `bool operator!=(const Graph& other) const`: Inequality operator.
+- `Graph& operator++()`: Prefix increment operator.
+- `Graph operator++(int)`: Postfix increment operator.
+- `Graph& operator--()`: Prefix decrement operator.
+- `Graph operator--(int)`: Postfix decrement operator.
+- `Graph operator*(const Graph& other) const`: Scalar multiplication operator.
+- `Graph& operator*=(int scalar)`: Scalar multiplication assignment operator.
+- `friend std::ostream& operator<<(std::ostream& os, const Graph& graph)`: Overloaded stream insertion operator for output.
+
+---
+
+# Algorithms.hpp
+
+## Class: Algorithms
+
+### Public Static Methods:
+- `static std::string isConnected(const Graph& g)`: Checks if the graph is connected.
+- `static std::string shortestPath(const Graph& g, int start, int end)`: Finds the shortest path between two vertices.
+- `static std::string isContainsCycle(const Graph& g)`: Checks if the graph contains a cycle.
+- `static std::string isBipartite(const Graph& g)`: Checks if the graph is bipartite.
+- `static std::string negativeCycle(const Graph& g)`: Detects negative cycles in the graph.
+
+### Private Static Methods:
+- `static bool BFS(const Graph& g, int start)`: Breadth-first search for graph traversal.
+- `static std::string dijkstra(const Graph& g, int start, int end)`: Dijkstra's algorithm for finding shortest paths.
+- `static std::string bellmanFord(const Graph& g, int start, int end)`: Bellman-Ford algorithm for finding shortest paths with negative weights.
+- `static std::string addPath(const std::vector<int>& prev, int start, int end)`: Utility function to add path from previous array.
+- `static bool DFS_Directed(const Graph& g, int v, std::vector<bool>& visited, std::vector<int>& parent)`: Depth-first search for directed graphs.
+- `static bool DFS_Undirected(const Graph& g, int v, std::vector<bool>& visited, std::vector<int>& parent, int parentVertex)`: Depth-first search for undirected graphs.
+- `static bool bellmanFord_DetectCycle(const Graph& g, std::vector<int>& parent)`: Helper function to detect cycles using Bellman-Ford algorithm.
+- `static std::string addCycle(const std::vector<int>& parent, int start)`: Utility function to add cycle from parent array.
+- `static bool BFS_Bipartite(const Graph& g, int start, std::vector<int>& color, std::unordered_set<int>& A, std::unordered_set<int>& B)`: Breadth-first search to check bipartiteness.
 
