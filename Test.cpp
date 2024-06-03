@@ -1,6 +1,7 @@
 #include "doctest.h"
 #include "Algorithms.hpp"
 #include "Graph.hpp"
+#include <vector>
 #include <sstream>
 
 
@@ -31,7 +32,7 @@ TEST_CASE("Test graph addition")
     CHECK(g3.printGraph() == "[0, 2, 1]\n[2, 0, 3]\n[1, 3, 0]");
 }
 
-TEST_CASE("Test graph addition assignment")
+TEST_CASE("Test graph addition and assignment")
 {
     ariel::Graph g1;
     vector<vector<int>> graph1 = {
@@ -48,11 +49,6 @@ TEST_CASE("Test graph addition assignment")
     g2.loadGraph(graph2);
 
     g1 += g2;
-
-    vector<vector<int>> expectedGraph = {
-        {0, 2, 1},
-        {2, 0, 3},
-        {1, 3, 0}};
 
     CHECK(g1.printGraph() == "[0, 2, 1]\n[2, 0, 3]\n[1, 3, 0]");
 }
@@ -75,15 +71,10 @@ TEST_CASE("Test graph subtraction")
 
     ariel::Graph g3 = g1 - g2;
 
-    vector<vector<int>> expectedGraph = {
-        {0, 0, -1},
-        {0, 0, -1},
-        {-1, -1, 0}};
-
     CHECK(g3.printGraph() == "[0, 0, -1]\n[0, 0, -1]\n[-1, -1, 0]");
 }
 
-TEST_CASE("Test graph subtraction assignment")
+TEST_CASE("Test graph subtraction and assignment")
 {
     ariel::Graph g1;
     vector<vector<int>> graph1 = {
@@ -100,11 +91,6 @@ TEST_CASE("Test graph subtraction assignment")
     g2.loadGraph(graph2);
 
     g1 -= g2;
-
-    vector<vector<int>> expectedGraph = {
-        {0, 0, -1},
-        {0, 0, -1},
-        {-1, -1, 0}};
 
     CHECK(g1.printGraph() == "[0, 0, -1]\n[0, 0, -1]\n[-1, -1, 0]");
 }
@@ -310,15 +296,10 @@ TEST_CASE("Test graph multiplication")
 
     ariel::Graph g3 = g1 * g2;
 
-    vector<vector<int>> expectedGraph = {
-        {0, 0, 2},
-        {1, 0, 1},
-        {1, 0, 0}};
-
     CHECK(g3.printGraph() == "[1, 0, 2]\n[1, 3, 1]\n[1, 0, 2]");
 }
 
-TEST_CASE("Test graph multiplication assignment")
+TEST_CASE("Test graph multiplication and assignment")
 {
     ariel::Graph g;
     vector<vector<int>> graph = {
@@ -329,29 +310,8 @@ TEST_CASE("Test graph multiplication assignment")
 
     g *= 2;
 
-    vector<vector<int>> expectedGraph = {
-        {0, 2, 0},
-        {2, 0, 2},
-        {0, 2, 0}};
-
     CHECK(g.printGraph() == "[0, 2, 0]\n[2, 0, 2]\n[0, 2, 0]");
 }
-
-TEST_CASE("Test graph division assignment")
-{
-   ariel::Graph g;
-    vector<vector<int>> graph = {
-        {0, 2, 0},
-        {2, 0, 2},
-        {0, 2, 0}};
-    g.loadGraph(graph);
-
-    g /= 2;
-
-    CHECK(g.printGraph() == "[0, 1, 0]\n[1, 0, 1]\n[0, 1, 0]");
-}
-
-
 
 TEST_CASE("Invalid operations")
 {

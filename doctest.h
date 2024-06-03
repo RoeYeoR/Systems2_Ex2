@@ -495,17 +495,9 @@ DOCTEST_GCC_SUPPRESS_WARNING_POP
 // which case we don't want to forward declare stuff from std - for reference:
 // https://github.com/doctest/doctest/issues/126
 // https://github.com/doctest/doctest/issues/356
- #if DOCTEST_CLANG
-// #include <ciso646>
-// #endif // clang
-#if __has_include(<ciso646>)
+#if DOCTEST_CLANG
 #include <ciso646>
-#else
-// Provide an alternative or a warning if the header is not found
-#warning "ciso646 not found, alternative spellings for operators may not be available."
-#endif
-
-#endif // DOCTEST_CLANG
+#endif // clang
 
 #ifdef _LIBCPP_VERSION
 #ifndef DOCTEST_CONFIG_USE_STD_HEADERS

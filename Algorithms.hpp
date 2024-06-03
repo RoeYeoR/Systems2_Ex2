@@ -5,6 +5,8 @@
 
 #include <string>
 #include <vector>
+#include <unordered_set>
+
 #include "Graph.hpp"
 
 namespace ariel {
@@ -18,13 +20,15 @@ namespace ariel {
         static std::string negativeCycle(const Graph& g);
 
     private:
-        static Graph reverseGraph(const Graph& g);
-        static void DFS(const Vertex& v, std::vector<bool>& visited, const Graph& g);
-        static std::vector<int> BFS(const Graph& g, int source, int destination); 
-        static std::vector<int> dijkstra(const Graph& g, int source, int destination); 
-        static bool isCyclicHelper(const Vertex& v, std::vector<bool>& visited, std::vector<int>& parent, std::vector<Vertex>& cycle); 
-        static std::string hasNegativeCycle(const Graph& g,const Vertex& src);
-        static std::string isBipartiteHelper(const Graph& g);  
+        static bool BFS(const Graph& g, int start);
+        static std::string dijkstra(const Graph& g, int start, int end);
+        static std::string bellmanFord(const Graph& g, int start, int end);
+        static std::string addPath(const std::vector<int>& prev, int start, int end);
+        static bool DFS_Directed(const Graph& g, int v, std::vector<bool>& visited, std::vector<int>& parent);
+        static bool DFS_Undirected(const Graph& g, int v, std::vector<bool>& visited, std::vector<int>& parent, int parentVertex);
+        static bool bellmanFord_DetectCycle(const Graph& g, std::vector<int>& parent);
+        static std::string addCycle(const std::vector<int>& parent, int start);
+        static bool BFS_Bipartite(const Graph& g, int start, std::vector<int>& color, std::unordered_set<int>& A, std::unordered_set<int>& B);
     };
 
 } // namespace ariel
