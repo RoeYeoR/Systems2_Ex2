@@ -11,8 +11,7 @@ TEST_CASE("Test graph addition")
 {
     
     ariel::Graph g1;
-    
-    
+    //check if graph isConnected after adding an edge between 2->0 to edges: 0->1,1->2
     vector<vector<int>> graph1 = {
         {0, 1, 0},
         {0, 0, 1},
@@ -31,12 +30,14 @@ TEST_CASE("Test graph addition")
     ariel::Graph g3 = g1 + g2;
     
     CHECK(g3.printGraph() == "[0, 1, 0]\n[0, 0, 1]\n[1, 0, 0]");
+
     CHECK(ariel::Algorithms::isConnected(g3) == "1");
 }
 
 TEST_CASE("Test graph addition and assignment")
 {
     ariel::Graph g1;
+    //check if graph g1 isConnected after adding to it graph g2
     vector<vector<int>> graph1 = {
         {0, 2, 1},
         {2, 0, 3},
@@ -55,12 +56,14 @@ TEST_CASE("Test graph addition and assignment")
     g1 += g2;
 
     CHECK(g1.printGraph() == "[0, 0, 0]\n[0, 0, 2]\n[0, 2, 0]");
+
     CHECK(ariel::Algorithms::isConnected(g1) == "0");
 }
 
 TEST_CASE("Test graph subtraction")
 {
     ariel::Graph g1;
+    //check if the shortestPath of graph g3 has been changed after subtraction 
     vector<vector<int>> graph1 = {
         {0, 3, 6},
         {3, 0, 2},
@@ -78,12 +81,15 @@ TEST_CASE("Test graph subtraction")
     ariel::Graph g3 = g1 - g2;
 
     CHECK(g3.printGraph() == "[0, 1, 1]\n[1, 0, 1]\n[1, 1, 0]");
+
     CHECK(ariel::Algorithms::shortestPath(g3,0,2) == "0->2");
 }
 
 TEST_CASE("Test graph subtraction and assignment")
 {
     ariel::Graph g1;
+    //check if the 2 groups of vertices have been changed after subtract g2 from g1
+    //meaning check if isBipartite method gave a different result
     vector<vector<int>> graph1 = {
         {0, 2, 0},
         {2, 0, 3},
@@ -101,12 +107,15 @@ TEST_CASE("Test graph subtraction and assignment")
     g1 -= g2;
 
     CHECK(g1.printGraph() == "[0, 0, 1]\n[0, 0, 2]\n[1, 2, 0]");
+
     CHECK(ariel::Algorithms::isBipartite(g1)== "The graph is bipartite: A={0, 1}, B={2}");
 }
 
 TEST_CASE("Test unary plus operator")
 {
     ariel::Graph g1;
+    //unary plus is neutral to multiply
+    //meaning no change
     vector<vector<int>> graph = {
         {0, 1, 0},
         {1, 0, 1},
@@ -122,6 +131,8 @@ TEST_CASE("Test unary plus operator")
 TEST_CASE("Test unary minus operator")
 {
     ariel::Graph g1;
+    //unary minus turns the sign of each element
+    //also check if after this operation there is a negative cycle.
     vector<vector<int>> graph = {
         {0, 1, 0},
         {1, 0, 1},
@@ -139,6 +150,7 @@ TEST_CASE("Test unary minus operator")
     expectedGraph.loadGraph(expected);
 
     CHECK(g2 == expectedGraph);
+
     CHECK(ariel::Algorithms::negativeCycle(g2) == "The graph contains a negative cycle");
 }
 
@@ -224,9 +236,9 @@ TEST_CASE("Test prefix increment operator")
         {0, 1, 0}};
     g.loadGraph(graph);
 
-    ++g; // increment the value by 1 before it is used in  an expression
+    ++g; // increment the value by 1 before it is used in an expression
 
-    CHECK(g.printGraph() == "[1, 2, 1]\n[2, 1, 2]\n[1, 2, 1]");
+    CHECK(g.printGraph() == "[0, 2, 0]\n[2, 0, 2]\n[0, 2, 0]");
 }
 TEST_CASE("Test postfix increment operator")
 {
@@ -239,15 +251,15 @@ TEST_CASE("Test postfix increment operator")
 
     g++; // increment the value by 1 after it is used in an expression
 
-    CHECK(g.printGraph() == "[1, 2, 1]\n[2, 1, 2]\n[1, 2, 1]");
+    CHECK(g.printGraph() == "[0, 2, 0]\n[2, 0, 2]\n[0, 2, 0]");
 }
 TEST_CASE("Test prefix decrement operator")
 {
     ariel::Graph g;
     vector<vector<int>> graph = {
-        {1, 2, 1},
-        {2, 1, 2},
-        {1, 2, 1}};
+        {0, 2, 1},
+        {2, 0, 2},
+        {1, 2, 0}};
     g.loadGraph(graph);
 
     --g;
@@ -258,16 +270,15 @@ TEST_CASE("Test postfix decrement operator")
 {
     ariel::Graph g;
     vector<vector<int>> graph = {
-        {1, 2, 1},
-        {2, 1, 2},
-        {1, 2, 1}};
+        {0, 2, 1},
+        {2, 0, 2},
+        {1, 2, 0}};
     g.loadGraph(graph);
 
     g--;
 
     CHECK(g.printGraph() == "[0, 1, 0]\n[1, 0, 1]\n[0, 1, 0]");
 }
-
 
 
 TEST_CASE("Test prefix and postfix increment operators")
@@ -308,6 +319,24 @@ TEST_CASE("Test graph multiplication")
     ariel::Graph g3 = g1 * g2;
 
     CHECK(g3.printGraph() == "[1, 0, 2]\n[1, 3, 1]\n[1, 0, 2]");
+
+
+    // multiply 2 matrices with different sizes
+    ariel::Graph g4;
+    vector<vector<int>> graph4 = {
+        {0, 1},
+        {1, 0}};
+      
+    g4.loadGraph(graph4);
+
+    ariel::Graph g5;
+    vector<vector<int>> graph5 = {
+        {0, 1, 1},
+        {1, 0, 1},
+        {1, 1, 0}};
+    g5.loadGraph(graph5);
+    CHECK_THROWS_WITH(ariel::Graph g6 = g4 * g5, "Cannot multiply graphs with incompatible sizes");
+
 }
 
 TEST_CASE("Test graph multiplication and assignment")
@@ -327,36 +356,43 @@ TEST_CASE("Test graph multiplication and assignment")
 TEST_CASE("Invalid operations")
 {
     ariel::Graph g1;
-    vector<vector<int>> graph = {
+    vector<vector<int>> graph1 = {
         {0, 1, 0},
         {1, 0, 1},
         {0, 1, 0}};
-    g1.loadGraph(graph);
+    g1.loadGraph(graph1);
+
     ariel::Graph g2;
-    vector<vector<int>> weightedGraph = {
+    //invalid graph: no square matrix
+    vector<vector<int>> graph2 = {
         {0, 1, 1, 1},
         {1, 0, 2, 1},
         {1, 2, 0, 1}};
-    CHECK_THROWS(g2.loadGraph(weightedGraph));
-    ariel::Graph g5;
-    vector<vector<int>> graph2 = {
-        {0, 1, 0, 0, 1},
-        {1, 0, 1, 0, 0},
-        {0, 1, 0, 1, 0},
-        {0, 0, 1, 0, 1},
-        {1, 0, 0, 1, 0}};
-    g5.loadGraph(graph2);
-    CHECK_THROWS(g5 * g1);
-    CHECK_THROWS(g1 * g2);
+    CHECK_THROWS(g2.loadGraph(graph2));
 
-    ariel::Graph g6;
+    ariel::Graph g3;
     vector<vector<int>> graph3 = {
         {0, 1, 0, 0, 1},
         {1, 0, 1, 0, 0},
         {0, 1, 0, 1, 0},
         {0, 0, 1, 0, 1},
         {1, 0, 0, 1, 0}};
-    g6.loadGraph(graph3);
-    CHECK_THROWS(g1 + g6);
+    g3.loadGraph(graph3);
+
+    //multiply different sizes of graphs
+    CHECK_THROWS(g3 * g1);
+    CHECK_THROWS(g1 * g2);
+
+    ariel::Graph g4;
+    vector<vector<int>> graph4 = {
+        {0, 1, 0, 0, 1},
+        {1, 0, 1, 0, 0},
+        {0, 1, 0, 1, 0},
+        {0, 0, 1, 0, 1},
+        {1, 0, 0, 1, 0}};
+    g4.loadGraph(graph4);
+
+     //addition of different sizes of graphs
+    CHECK_THROWS(g1 + g4);
 }
 

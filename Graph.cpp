@@ -84,6 +84,14 @@ namespace ariel {
         {
             throw std::invalid_argument("Invalid graph: The graph is not a square matrix.");
         }
+        //check if there is a vertex with dist to itself !=0
+        for(int i=0; i<adj_Mat.size();i++)
+        {
+            if(adj_Mat[i][i] != 0)
+            {
+             throw std::invalid_argument("Invalid graph: At least one vertex with distance to itself != 0.");
+            }
+        }
 
         adjMatrix = adj_Mat;
         is_directed = isDirected(adjMatrix);
@@ -249,7 +257,12 @@ namespace ariel {
     Graph& Graph::operator++() {
             for (int i = 0; i < numOfVertices; ++i) {
                 for (int j = 0; j < numOfVertices; ++j) {
-                    ++adjMatrix[i][j];
+                     //change only the exists edges
+                    if(this->adjMatrix[i][j] !=0)
+                    {
+                        ++this->adjMatrix[i][j];
+                    }
+                     
                 }
             }
             return *this;
@@ -257,16 +270,27 @@ namespace ariel {
 
         // Postfix Increment Operator
     Graph Graph::operator++(int) {
-            Graph temp(*this);
-            ++(*this);
-            return temp;
+            Graph temp(*this); // Create a temporary copy of the current graph
+            for (int i = 0; i < this->adjMatrix.size(); ++i) {
+                for (int j = 0; j < this->adjMatrix[i].size(); ++j) {
+                    if (this->adjMatrix[i][j] != 0) {
+                        ++this->adjMatrix[i][j];
+                    }
+                }
+            }
+            return temp; // Return the temporary copy
         }
 
         // Prefix Decrement Operator
     Graph& Graph::operator--() {
             for (int i = 0; i < numOfVertices; ++i) {
                 for (int j = 0; j < numOfVertices; ++j) {
-                    --adjMatrix[i][j];
+                    //change only the exists edges
+                    if(this->adjMatrix[i][j] !=0)
+                    {
+                      --this->adjMatrix[i][j];
+                    }
+                    
                 }
             }
             return *this;
@@ -274,9 +298,15 @@ namespace ariel {
 
         // Postfix Decrement Operator
     Graph Graph::operator--(int) {
-            Graph temp(*this);
-            --(*this);
-            return temp;
+        Graph temp(*this); // Create a temporary copy of the current graph
+        for (int i = 0; i < this->adjMatrix.size(); ++i) {
+            for (int j = 0; j < this->adjMatrix[i].size(); ++j) {
+                if (this->adjMatrix[i][j] != 0) {
+                    --this->adjMatrix[i][j];
+                }
+            }
+        }
+         return temp; // Return the temporary copy
         }
         // Output Operator
     std::ostream& operator<<(std::ostream& os, const Graph& graph) {
@@ -286,7 +316,7 @@ namespace ariel {
 
    Graph Graph::operator*(const Graph& other) const {
     
-    if (adjMatrix[0].size() != other.adjMatrix.size()) {
+    if (this->adjMatrix.size() != other.adjMatrix.size()) {
         throw std::invalid_argument("Cannot multiply graphs with incompatible sizes");
     }
 
