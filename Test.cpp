@@ -153,6 +153,23 @@ TEST_CASE("Test unary minus operator")
 
     CHECK(ariel::Algorithms::negativeCycle(g2) == "The graph contains a negative cycle");
 }
+TEST_CASE("Test greater than operator")
+{
+    ariel::Graph g1;
+    vector<vector<int>> graph1 = {
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 1, 0}};
+    g1.loadGraph(graph1);
+
+    ariel::Graph g2;
+    vector<vector<int>> graph2 = {
+        {0, 1},
+        {1, 0}};
+     g2.loadGraph(graph2);
+
+    CHECK(g1 > g2);
+}
 
 
 TEST_CASE("Test less than operator")

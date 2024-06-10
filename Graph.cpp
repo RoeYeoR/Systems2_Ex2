@@ -9,6 +9,8 @@
 namespace ariel {
 
     Graph::Graph() {}
+    Graph::Graph(int n) : adjMatrix(n, std::vector<int>(n, 0)) {}
+
 
     bool Graph::get_is_directed() const
     {
@@ -46,11 +48,9 @@ namespace ariel {
     }
         int Graph::countEdges() const {
         int numOfEdges = 0;
-        int numOfVertices = adjMatrix.size();
-
         
-        for (int i = 0; i < numOfVertices; i++) {
-            for (int j = 0; j < numOfVertices; j++) {
+        for (int i = 0; i < adjMatrix.size(); i++) {
+            for (int j = 0; j < adjMatrix.size(); j++) {
                 if (adjMatrix[i][j] != 0) {
                 numOfEdges++;
                 }
@@ -69,8 +69,8 @@ namespace ariel {
         Graph gT(n);
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
-                if (adjMatrix[i][j]) {
-                    gT.adjMatrix[j][i] = 1;
+                if (adjMatrix[i][j] !=0) {
+                    gT.adjMatrix[j][i] = adjMatrix[i][j];
                 }
             }
         }
@@ -127,17 +127,16 @@ namespace ariel {
         // Check if each edge of the other graph exists in this graph
         for (size_t i = 0; i < otherMatrix.size(); ++i) {
             for (size_t j = 0; j < otherMatrix[i].size(); ++j) {
-                // If the edge exists in the other graph but not in this graph, return false
+                // If an edge exists in the other graph but not in this graph
+                //or value of otherMatrix != value of thisMatrix on the same position, return false
                 if (otherMatrix[i][j] != 0 && (i >= thisMatrix.size() || j >= thisMatrix[i].size() || thisMatrix[i][j] != otherMatrix[i][j])) {
                     return false;
                 }
             }
         }
 
-        // All edges of the other graph exist in this graph or are not present in this graph
         return true;
     }
-
 
         // Addition Operator
     Graph Graph::operator+(const Graph& other) const {
@@ -194,17 +193,19 @@ namespace ariel {
     // Greater Than Operator
     bool Graph::operator>(const Graph& other) const {
        
-        if (containsGraph(other)) {
-        return false;
-    }
-
-    if (countEdges() > other.countEdges()) {
+    if (containsGraph(other)) {
         return true;
     }
 
-    // If both graphs have the same number of edges, compare their sizes
-    return (get_adjMatrix().size() > other.get_adjMatrix().size());
+    else if (countEdges() > other.countEdges()) {
+        return true;
     }
+    else {
+        // If both graphs have the same number of edges, compare their sizes
+        return (get_adjMatrix().size() > other.get_adjMatrix().size());
+    }
+    
+}
 
     // Greater Than or Equal To Operator
     bool Graph::operator>=(const Graph& other) const {
@@ -221,13 +222,15 @@ namespace ariel {
     // Less Than or Equal To Operator
     bool Graph::operator<=(const Graph& other) const {
         
-        return !(*this > other);
+        return !(*this > other) || (*this == other);
     }
 
     // Equality Operator
     bool Graph::operator==(const Graph& other) const {
-        // Check if both graphs have the same size and contain the same edges
-        return this->get_adjMatrix().size() == other.get_adjMatrix().size() && this->get_adjMatrix() == other.get_adjMatrix();
+        
+        return this->get_adjMatrix().size() == other.get_adjMatrix().size() 
+        //the following == operator refers to std::vector class
+        && this->get_adjMatrix() == other.get_adjMatrix();
     }
 
     // Inequality Operator
